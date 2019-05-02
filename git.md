@@ -27,7 +27,7 @@
 
 --------------------------------------------------
 
-## Git Bash界面
+## Git Bash 界面
 
 + 重置 `Git Bash` 界面：`$ reset`
 
@@ -110,7 +110,9 @@
     + 注：执行此命令自动将删除操作添加到暂存区
 
 + 覆盖文件内容：`$ echo "message" > <file>`
+
 + 追加内容到文件末尾：`$ echo "message" >> <file>`
+
 + 显示暂存区和工作区的文件差异：`$ git diff`
 
 + **文件的重要操作：删除与恢复**
@@ -132,6 +134,7 @@
 ## 版本库相关操作
 
 + 从已存在的目录新建一个版本库：`$ git init`
+
 + 将操作从工作区添加到暂存区：`$ git add <file>`
 
 + 将操作从暂存区提交到版本库：`$ git commit -m "此次提交说明"`
@@ -144,12 +147,19 @@
     ```
 
 + 移除暂存区中文件准备提交状态：`$ git reset HEAD <file>`
+
 + 查看工作区与暂存区的内容：`$ git status`
-+ 查看提交日志：
-  + 查看全部的提交日志：`$ git log`
+
++ 查看提交日志：`$ git log`
   + 将每一个提交日志缩减为一行显示：`$ git log --pretty=oneline`
   + 查看指定文件的提交日志，并且缩减为一行显示：`$ git log --pretty=oneline <file>`
+  + 注：此命令不能查看已删除的提交日志，即如果进行了版本回退，那么回退版本号之后再提交的日志都不能查看，如要查看全部提交日志，请使用 `$ git reflog`
+
++ 查看所有分支的所有提交日志：`$ git reflog`
+  + 注：此命令可以查看所有分支的所有提交日志（包括 `commit` 和 `reset` 的操作），包括已经被删除的 `commit` 记录，`git log` 则不能查看已经被删除了的 `commit` 记录
+
 + 查看命令行历史记录：`$ history`
+
 + 版本回退：
   + 方式一：`$ git reset --hard HEAD^`
     + 注：上一个版本就是 `HEAD^`，上上一个版本就是 `HEAD^^`，当然往上100个版本写100个^比较容易数不过来，所以写成 `HEAD~100`
@@ -160,26 +170,44 @@
 
 ## 远程仓库
 
+### 查看远程仓库的信息
+
++ 查看远程仓库的信息：`$ git remote`
+
++ 查看远程仓库的详细信息：`$ git remote -v`
+  + 可抓取的远程仓库地址：`origin  git@github.com:your/yourRepos.git (fetch)`
+  + 可推送的远程仓库地址：`origin  git@github.com:your/yourRepos.git (push)`
+  + 注：如果没有抓取或者推送的权限，就看不到相应的地址
+
+### 连接与取消连接远程仓库
+
 + 连接远程仓库：
   + 方式一：`$ git remote add origin git@github.com:your/yourRepos.git`
   + 方式二：`$ git remote add origin https://github.com/your/yourRepos.git`
   + 注：这里远程仓库的默认名字是 `origin`,也可以改成别的
 
++ 取消与远程仓库的连接：`$ git remote rm origin`
+
++ 修改远程仓库地址：`$ git remote origin set-url <URL>`
+
+### 推送到远程仓库
+
 + 推送到远程仓库同时指定默认远程仓库：`$ git push -u origin master`
-  + 注：第一次将本地仓库推送到远程仓库是可使用此命令。此命令将本地的 `master` 分支推送到 `origin` 主机，同时指定 `origin` 为默认主机，后面就可以不加任何参数使用 `git push` 了。
-  + 注：第一次推送本地 `master` 分支时，加上了 `-u` 参数，Git 不但会把本地的  `master` 分支内容推送的远程新的 `master` 分支，还会把本地的 `master` 分支和远程的 `master` 分支关联起来，在以后的推送或者拉取时就可以简化命令。
+  + 注：第一次推送本地 `master` 分支到远程仓库时，加上了 `-u` 参数，Git 不但会把本地的  `master` 分支内容推送到远程仓库新的 `master` 分支，还会把本地的 `master` 分支和远程的 `master` 分支关联起来，指定 `origin` 为默认远程仓库，在以后的推送或者拉取时就可以简化命令。
 
 + 推送到远程仓库：`$ git push origin master`
-  + 注：将当前分支推送到远程仓库 `origin` 的分支 `master`
+  + 注：将该分支上的所有本地提交推送到远程仓库 `origin` 的分支 `master`
 
 + 推送到远程仓库：`$ git push origin`
   + 注：将当前分支推送到远程仓库 `origin` 的对应分支。如果当前分支只有一个追踪分支，那么分支名称都可以省略
 
-+ 推送本地分支推送到远程仓库的另一个分支：`$ git push origin local:master`
-  + 注：将本地分支 `local` 推送到远程仓库的 `master` 分支
++ 推送本地分支推送到远程仓库的分支：`$ git push origin local:temp`
+  + 例如：将本地分支 `local` 推送到远程仓库的 `temp` 分支,如果远程仓库没有 `temp` 分支就会创建新分支，并且接收本地分支的所有提交
+
+### 从远程仓库拉取
 
 + 从远程仓库拉取：`$ git pull origin master`
-  + 注：将远程仓库 `origin` 的分支 `master`拉取到当前分支
+  + 注：将远程仓库 `origin` 的分支 `master` 拉取到当前分支
 
 + 克隆远程仓库：`$ git clone git@github.com/your/yourRepos.git`
   + 注：将远程仓库完整的克隆一份到本地 Git 开始路径下
@@ -193,11 +221,36 @@
   + 对文件做的更改如果在当前分支上提交，那么改变只能在此分支上可以查看，其他分支上看不到文件的改变，其他分支还停留在最后一次提交的位置
   + 合并分支之后，彼此分支之间的进度就统一了
 
++ 分支管理：
+  + `master` 分支：此分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面进行工作
+  + `dev` 分支：此分支是工作分支，是不稳定的。在需要发布新版本时：把 `dev` 分支合并到 `master` 上，在 `master` 分支上发布新版本
+  + `own-branch`：团队每个人自己的工作分支，时不时的将工作进度合并到 `dev` 分支上，构成整个团队的开发进度
+  + `issue` 分支：此分支是 `Bug` 分支，每个 `Bug` 都可以通过一个新的临时分支来修复，如 `issue-001`，修复后再合并分支，然后将临时分支删除
+  + `feature` 分支：开发新功能，实验性功能分支；每添加一个新功能，可以新建一个 `feature` 分支，在上面开发，完成后合并分支，最后删除该  `feature` 分支
+
+### 查看分支
+
 + 查看当前本地版本库的所有分支：`$ git branch`
+
 + 查看当前本地版本库与远程仓库的所有分支：`$ git branch -a`
 
-+ 创建新分支：`$ git branch new`
-  + 注：创建一个新分支 `new`
++ 查看分支的合并情况：用带参数的 `git log` 也可以看到分支的合并情况
+  + `$ git log --graph`
+  + `$ git log --graph --pretty=oneline`
+  + `$ git log --graph --pretty=oneline --abbrev-commit`
+
++ 查看本地分支的跟踪分支（上游分支）：`git branch -vv`
+
+### 创建分支
+
++ 创建本地新分支：`$ git branch new`
+  + 注：以最新一次 `commit` 为参考创建一个新分支 `new`,新分支的提交日志与参考的提交日志一致
+
++ 以某次 `commit` 为参考创建本地新分支：`git branch branch_name [commit_id/HEAD/master]`
+  + 注：参考只要是一个可以标识 `commit` 的引用就可以
+
++ 创建远程新分支：`$ git push origin new`
+  + 注：此命令作用是将本地当前分支内容推送到远程分支，但是如果远程仓库中没有 `new` 分支，那么就会创建新分支 `new` 并推送内容
 
 + 切换分支：`$ git checkout new`
   + 注：切换到分支 `new`
@@ -207,6 +260,14 @@
     + `$ git branch new`
     + `$ git checkout new`
 
++ 在本地创建与远程分支对应的分支：`$ git checkout -b new origin/new`
+  + 注：基于远程分支创建本地分支。本地新建一个分支 `new`，并切换到新建的分支 `new`，并且建立本地分支 `new` 与远程分支 `origin/new` 的跟踪关系，本地和远程分支的名称最好一致
+
++ 建立本地分支和远程分支的关联：`$ git branch --set-upstream-to=origin/dev dev`
+  + 注：建立本地 `dev` 分支与远程 `origin/dev` 分支的链接
+
+### 合并分支
+
 + 合并指定分支到当前分支：`$ git merge new`
   + 注：`git merge` 命令用并于合指定分支到当前分支。比如当前分支是 `master` ，那么此命令就是将 `new` 分支合并到 `master` 上
   + 注：此命令使用的是 `fast forward` 模式，在这种模式下，删除被合并分支后，会丢掉分支信息
@@ -214,17 +275,21 @@
 + 合并指定分支到当前分支并且不使用 `fast forward` 模式：`$ git merge --no-ff -m "commit message" new`
   + 注：`--no-ff` 表示强制禁用 `fast forward` 模式，Git 就会在`merge` 时生成一个新的 `commit`，这样，从分支历史上就可以看出分支信息
 
+### 删除分支
+
++ 撤销上一次的合并分支：`$ git merge --abort`
+
 + 删除当前本地版本库的指定分支：`$ git branch -d new`
-  + 注：删除分支 `new`
+  + 注：删除分支 `new`，此分支必须是被合并过的分支
+
++ 强制删除未合并过的分支：`$ git branch -D <branch-name>`
+  + 注：分支存在修改但还没有被合并，如果删除将会丢失修改，系统会阻止删除操作。如果要强行删除，需要使用大写的 `-D` 参数
 
 + 删除远程仓库指定分支：
   + 方式一：`$ git push origin -d new`
   + 方式二：`$ git push origin :new`
 
-+ 查看分支的合并情况：用带参数的 `git log` 也可以看到分支的合并情况
-  + `$ git log --graph`
-  + `$ git log --graph --pretty=oneline`
-  + `$ git log --graph --pretty=oneline --abbrev-commit`
+### 储藏分支 - `stash`
 
 + 储存并隐藏未完结的修改/未提交的修改：`$ git stash`
   + 注：将工作区和暂存区中没有 `commit` 的内容隐藏起来，之后在工作区中就是干净的。把当前工作现场“储藏”起来，可以等到以后恢复现场后继续工作
@@ -247,10 +312,11 @@
   + 注：当恢复时没有产生冲突，此命令恢复的同时会删除此次 `stash` 内容记录
   + 注：当恢复时产生冲突，此命令恢复之后会保留此次 `stash` 内容记录
   
-
 --------------------------------------------------
 
 ## 常见的问题
+
+### 与文件操作相关
 
 + **设置 'Git' 的用户主目录：**
   + 问题描述：在 'Windows' 下安装 'Git' 后，默认的用户主目录和开始路径一般都是：C:\Users\用户名。很多人都不想将一些运行文件放在默认路径下，想要放在别的地方
@@ -275,10 +341,6 @@
     + 修改 '起始位置' 为自定义的 'Git' 本地仓库的路径，如：`G:\Git Workspace`
     + 重启 'Git' 即可
 
-+ **`cd` 命令进行目录切换时需要注意目录中的空格：**
-  + 解决方式一：使用 `""` 引号将目录名括起来
-  + 解决方式二：使用 `\` 加上空格，代替直接输入空格
-
 + **输入 `$ git add <file>` 后出现警告：**
   + 如下
 
@@ -291,16 +353,15 @@
   + 解决方法，输入命令:
     `$ git config --global core.autocrlf false`
 
+### 与远程仓库相关
+
 + **如果在第一次推送到远程仓库时出现不能推送的错误**
   + 显示以下的错误信息
 
     ```text
     error: failed to push some refs to 'https://github.com/your/repository.git'
-    hint: Updates were rejected because the remote contains work that you do
-    hint: not have locally. This is usually caused by another repository pushing
-    hint: to the same ref. You may want to first integrate the remote changes
-    hint: (e.g., 'git pull ...') before pushing again.
-    hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+    hint: Updates were rejected because the remote contains work that you do not have locally. This is usually caused by another repository pushing
+    hint: ......
     ```
   
   + 问题原因：因为远程仓库中已经进行了初始化操作，已经存在 readme.md 或者其他文件了，所以需要先pull下来。命令如下：`$ git pull origin master`
@@ -319,6 +380,29 @@
     然后再使用前面的命令push将本地提交推送到远程仓库。后面如果本地还有 `commit`，
     就可以直接用 `$ git push origin master` 推送
 
++ **使用 `$ git push` 命令时出现错误**
+  + 提示如下：
+
+    ```text
+      fatal: The current branch master has no upstream branch.
+      To push the current branch and set the remote as upstream, use git push --set-upstream origin master
+    ```
+
+  + 接下来输入：`$ git branch --set-upstream-to=origin/master master`；又会出现如下提示：
+  
+    ```text
+      error: the requested upstream branch 'upstream/master'does not exist
+      hint:......
+    ```
+  
+  + 问题原因：本地分支没有与远程分支建立关联
+
+  + 解决方法:
+    + 第一步：`$ git pull origin master --allow-unrelated-histories`
+    + 第二步：`$ git branch --set-upstream-to=origin/master master`
+
+### 与分支操作相关
+
 + **当执行合并分支命令 `git merge` 时，出现冲突导致不能合并分支**
   + 出现如下提示：
 
@@ -335,7 +419,22 @@
   + 解决方法：当 Git 无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
     + 解决冲突就是把 Git 合并失败的文件 **手动编辑** 为我们希望的内容，再提交
 
++ **删除分支出错**
+  + 显示如下错误信息
+
+    ```text
+    error: The branch 'temp' is not fully merged.
+    If you are sure you want to delete it, run 'git branch -D temp'.
+    ```
+
+  + 问题原因：提示被删除的分支修改了内容还没有未被合并过，如果删除将会丢失修改，系统会阻止删除操作。
+  + 解决方法：合并分支之后再删除，或者强制删除分支：`$ git branch -D <branch-name>`
+
 ## 使用 Git 注意的地方
+
++ **`cd` 命令进行目录切换时需要注意目录中的空格：**
+  + 解决方式一：使用 `""` 引号将目录名括起来
+  + 解决方式二：使用 `\` 加上空格，代替直接输入空格
 
 + **分支合并**
   + 如果需要合并的两个分支**都各自有新的提交**，这时使用分支合并命令很可能会产生冲突。此时应该 **手动编辑** 合并失败的文件为我们希望的内容。然后再提交，最后再重新执行合并命令
