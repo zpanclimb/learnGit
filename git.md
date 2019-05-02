@@ -175,7 +175,7 @@
 + 推送到远程仓库：`$ git push origin`
   + 注：将当前分支推送到远程仓库 `origin` 的对应分支。如果当前分支只有一个追踪分支，那么分支名称都可以省略
 
-+ 推送本地分支到远程仓库的另一个分支：`$ git push origin local:master`
++ 推送本地分支推送到远程仓库的另一个分支：`$ git push origin local:master`
   + 注：将本地分支 `local` 推送到远程仓库的 `master` 分支
 
 + 从远程仓库拉取：`$ git pull origin master`
@@ -225,6 +225,28 @@
   + `$ git log --graph`
   + `$ git log --graph --pretty=oneline`
   + `$ git log --graph --pretty=oneline --abbrev-commit`
+
++ 储存并隐藏未完结的修改/未提交的修改：`$ git stash`
+  + 注：将工作区和暂存区中没有 `commit` 的内容隐藏起来，之后在工作区中就是干净的。把当前工作现场“储藏”起来，可以等到以后恢复现场后继续工作
+  + 注：可以多次将未提交的修改储藏，如同一个栈
+  + 注：当想要切换分支时当前分支存在未提交的修改时，不能切换分支，此时可使用此命令将未提交的修改储藏起来，再切换到其他分支
+
++ 查看 `stash` 储藏的内容：`$ git stash list`
+
++ 将 `stash` 最后一条记录储藏的内容恢复到工作区：`$ git stash apply`
+  + 注：执行此命令将内容恢复后，`stash` 内容并不删除，你需要用 `git stash drop` 来删除
+  + 注：最后一条记录如同栈顶
+
++ 将指定的 `stash` 储藏的内容恢复到工作区：`$ git stash apply stash@{num}`
+  + 注：将 `stash` 储藏的内容的第 `num` 条记录恢复到工作区，`num` 从 0 开始
+
++ 移除 `stash` 储藏的内容：`$ git stash drop`
+  + 注：此命令每次只能删除一条储藏记录
+
++ 恢复的同时删除 `stash` 内容：`$ git stash pop`
+  + 注：当恢复时没有产生冲突，此命令恢复的同时会删除此次 `stash` 内容记录
+  + 注：当恢复时产生冲突，此命令恢复之后会保留此次 `stash` 内容记录
+  
 
 --------------------------------------------------
 
