@@ -201,13 +201,43 @@
 + 推送到远程仓库：`$ git push origin`
   + 注：将当前分支推送到远程仓库 `origin` 的对应分支。如果当前分支只有一个追踪分支，那么分支名称都可以省略
 
-+ 推送本地分支推送到远程仓库的分支：`$ git push origin local:temp`
-  + 例如：将本地分支 `local` 推送到远程仓库的 `temp` 分支,如果远程仓库没有 `temp` 分支就会创建新分支，并且接收本地分支的所有提交
++ 推送本地分支推送到远程仓库的分支：`$ git push origin <local-branch>:<remote-ranch>`
+  + 例如：将本地分支 `local-branch` 推送到远程仓库的 `remote-branch` 分支,如果远程仓库没有 `remote-branch` 分支就会创建新分支，并且接收本地分支的所有提交
 
 ### 从远程仓库拉取
 
++ Git 中从远程的分支获取最新的版本到本地有两个命令：
+  + `git fetch`：从远程获取最新版本到本地，不会自动 `merge`
+  
+      ```text
+      git fetch orgin master //将远程仓库的 master 分支下载到本地当前 branch 中
+      git log -p master ..origin/master //比较本地的 master 分支和 origin/master 分支的差别
+      git merge origin/master //进行合并
+      ```
+
+    + 也可以用以下指令：
+
+    ```text
+    git fetch origin master: temp  //从远程仓库 master 分支获取最新，在本地建立 temp 分支
+    git diff temp  //将当前分支和 temp 进行对比
+    git merge temp //合并 temp 分支到当前分支
+    ```
+
+  + `git pull`：从远程获取最新版本并 `merge` 到本地
+  
+    ```text
+    git pull origin master
+    上述命令其实相当于 git fetch 和 git merge
+    ```
+  
+  + 比较 `fetch` 和 `pull` ：
+    + 简单地讲：`pull` = `fetch` + `merge`
+    + 使用 `fetch`：在 `merge` 前，我们可以查看更新情况，然后再决定是否合并
+
 + 从远程仓库拉取：`$ git pull origin master`
   + 注：将远程仓库 `origin` 的分支 `master` 拉取到当前分支
+
++ 从远程分支拉取到本地指定分支：`$ git pull origin <remote-branch>:<local-branch>`
 
 + 克隆远程仓库：`$ git clone git@github.com/your/yourRepos.git`
   + 注：将远程仓库完整的克隆一份到本地 Git 开始路径下
@@ -239,7 +269,9 @@
   + `$ git log --graph --pretty=oneline`
   + `$ git log --graph --pretty=oneline --abbrev-commit`
 
-+ 查看本地分支的跟踪分支（上游分支）：`git branch -vv`
++ 查看本地分支的远程跟踪分支（上游分支）：`git branch -vv`
+
++ 比较本地分支与远程分支的不同：`$ git log -p <local-branch>..origin/<remote-branch>`
 
 ### 创建分支
 
