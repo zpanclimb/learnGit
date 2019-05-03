@@ -35,13 +35,29 @@
 
 ## 用户信息
 
-+ 添加用户或者修改用户名：`$ git config --global user.name "your name"`
+### 全局信息
 
-+ 添加邮箱或者修改邮箱：`$ git config --global user.email your@example.com`
++ 添加或者修改全局用户名：`$ git config --global user.name "your name"`
 
-+ 查看用户名：`$ git config user.name`
++ 添加或者修改全局邮箱地址：`$ git config --global user.email "email address"`
 
-+ 查看邮箱：`$ git config user.email`
++ 查看全局用户名：`$ git config --global user.name`
+
++ 查看全局邮箱地址：`$ git config --global user.email`
+
++ 查看全局配置信息：`$ git config --global --list`
+
+### 局部信息
+
++ 添加或者修改局部用户名：`$ git config user.name "your name"`
+
++ 添加或者修改局部邮箱地址：`$ git config user.email "email address"`
+
++ 查看局部用户名：`$ git config --local user.name`
+
++ 查看局部邮箱地址：`$ git config --local user.email`
+
++ 查看局部配置信息：`$ git config --local --list`
 
 + 查看本地用户：`$ whoami`
 
@@ -258,10 +274,10 @@
       git merge origin/master //进行合并
       ```
 
-    + 也可以用以下指令：
+    + 也可以用以下指令：多创建一个临时分支保存远程最新内容，合并之后再将其删除
 
     ```text
-    git fetch origin master: temp  //从远程仓库 master 分支获取最新，在本地建立 temp 分支
+    git fetch origin master:temp  //从远程仓库 master 分支获取最新，在本地建立 temp 分支
     git diff temp  //将当前分支和 temp 进行对比
     git merge temp //合并 temp 分支到当前分支
     ```
@@ -279,12 +295,14 @@
 
 + 抓取远程仓库最新的内容：`$ git fetch --all`
 
-+ 运行 `git fetch origin` 命令：这个命令从远程仓库中抓取本地没有的数据，并且更新本地数据库，移动 `origin/master` 指针指向新的、更新后的位置
++ 抓取远程分支最新内容到当前分支： `git fetch origin <branch-name>` 
+  + 注：此命令从远程仓库中抓取本地没有的数据，并且更新本地数据库,并设定当前分支的 `FETCH_HEAD` 为对应的远程仓库分支
+  + 注：你需要比较远程分支内容和当前分支内容的差异，视需要手动将远程分支合并到本地分支 `$ git merge origin/<branch-name>`
 
-+ 从远程仓库拉取：`$ git pull origin master`
-  + 注：将远程仓库 `origin` 的分支 `master` 拉取到当前分支
++ 拉取远程仓库分支到当前分支：`$ git pull origin <branch-name>`
+  + 例如：`$ git pull origin master`：将远程仓库 `origin` 的分支 `master` 拉取到当前分支
 
-+ 从远程分支拉取到本地指定分支：`$ git pull origin <remote-branch>:<local-branch>`
++ 拉取远程分支到本地指定分支：`$ git pull origin <remote-branch>:<local-branch>`
 
 + 克隆远程仓库：`$ git clone git@github.com/your/yourRepos.git`
   + 注：将远程仓库完整的克隆一份到本地 Git 开始路径下
@@ -372,6 +390,8 @@
 + 合并指定分支到当前分支：`$ git merge new`
   + 注：`git merge` 命令用并于合指定分支到当前分支。比如当前分支是 `master` ，那么此命令就是将 `new` 分支合并到 `master` 上
   + 注：此命令使用的是 `fast forward` 模式，在这种模式下，删除被合并分支后，会丢掉分支信息
+
++ 合并远程分支到本地当前分支：`$ git merge origin/<branch-name>`
 
 + 合并指定分支到当前分支并且不使用 `fast forward` 模式：`$ git merge --no-ff -m "commit message" <branch-name>`
   + 注：`--no-ff` 表示强制禁用 `fast forward` 模式，Git 就会在`merge` 时生成一个新的 `commit`，这样，从分支历史上就可以看出分支信息
