@@ -29,17 +29,15 @@
 
 ## Git Bash 界面
 
-+ 重置 `Git Bash` 界面：`$ reset`
-
 + 清除 `Git Bash` 界面中的内容：`$ clear`
 
 --------------------------------------------------
 
 ## 用户信息
 
-+ 添加用户：`$ git config --global user.name "your name"`
++ 添加用户或者修改用户名：`$ git config --global user.name "your name"`
 
-+ 添加邮箱：`$ git config --global user.email your@example.com`
++ 添加邮箱或者修改邮箱：`$ git config --global user.email your@example.com`
 
 + 查看用户名：`$ git config user.name`
 
@@ -80,6 +78,8 @@
 
 ## 文件操作
 
+### 创建、查看、删除文件
+
 + 创建一个文件：`$ touch <file>`
   + 例如：创建一个文件名为 'example' 的 'txt' 文件：`$ touch example.txt`
 
@@ -106,6 +106,7 @@
 + 删除文件：
   + 只删除工作区的文件：`$ rm <file>`
     + 注：执行此命令需要手动使用 `add` 命令将删除操作添加到暂存区
+
   + 同时删除工作区和暂存区的文件：`$ git rm <file>`
     + 注：执行此命令自动将删除操作添加到暂存区
 
@@ -113,21 +114,33 @@
 
 + 追加内容到文件末尾：`$ echo "content" >> <file>`
 
-+ 显示暂存区和工作区的文件差异：`$ git diff`
-
 + **文件的重要操作：删除与恢复**
   + **删除**
     + `$ rm <file>`
     + `$ git rm <file>`
 
-  + **恢复文件，或者撤销删除操作**
-    + 从工作区删除，还没有添加到暂存区，恢复文件只需要一步：`$ git checkout -- <file>`
-    + 从工作区和暂存区删除，但是还没有提交到版本库，恢复文件需要两步：
+  + **恢复文件内容，或者撤销删除操作**
+    + 对文件的修改或者删除操作还在工作区，但是还没有添加到暂存区，恢复文件只需要一步：`$ git checkout -- <file>`
+  
+    + 对文件的修改或者删除操作已添加到暂存区，但是还没有提交到版本库，恢复文件需要两步：
       + 第一步，从暂存区移除：`$ git reset HEAD <file>`
       + 第二步，撤销删除操作：`$ git checkout -- <file>`
-    + 如果删除操作已经提交至版本库：那么只能使用版本回退
-      + 版本回退方式一：`$ git reset --hard HEAD^`
-      + 版本回退方式二：`$ git reset --hard commit_id`
+  
+    + 如果删除操作已经提交至版本库：那么请使用版本回退
+
+### 比较文件的差异
+
++ 比较工作区和暂存区的文件差异：`$ git diff`
+
++ 比较暂存区与最新本地版本库：`$ git --cached`
+
++ 比较工作区与最新本地版本库：`$ git HEAD`
+
++ 比较工作区与指定 `commit_id` 的差异：`$ git commit_id`
+
++ 比较暂存区与指定 `commit_id` 的差异：`$ git --cached commit_id`
+
++ 比较两个 `commit-id` 之间的差异：`$ git commit_id commit_id`
 
 --------------------------------------------------
 
@@ -156,8 +169,11 @@
 + 撤销工作区的文件修改：`$ git checkout -- <file>`
   + 注：此命令只能撤销工作区的文件修改
 
++ 移除暂存区中文件至未跟踪状态：`$ git rm --cached <file>`
+  + 使用此命令可将文件的状态置为 `untracked files`
+
 + 移除暂存区中文件准备提交状态：`$ git reset HEAD <file>`
-  + 注：此命令将文件从暂存区移除，并放到工作区
+  + 注：当存在提交历史时可使用此命令，将文件从暂存区移除，并放到工作区
 
 + 撤销上一次提交并将暂存区文件重新提交：`$ git commit --amend`
   + 带上提交信息：`$ git commit --amend -m "commit message"`
@@ -167,6 +183,7 @@
 ### 查看日志与历史
 
 + 查看提交日志：`$ git log`
+  + 一行内显示简写：`$ git log --oneline`
   + 将每一个提交日志缩减为一行显示：`$ git log --pretty=oneline`
   + 缩短 `commit_id` ，一行内显示：`$ git log --pretty=oneline --abbrev-commit`
   + 查看指定文件的提交日志，并且缩减为一行显示：`$ git log --pretty=oneline <file>`
@@ -178,11 +195,15 @@
 
 + 查看命令行历史记录：`$ history`
 
-+ 版本回退：
++ **版本回退：**
   + 方式一：`$ git reset --hard HEAD^`
     + 注：上一个版本就是 `HEAD^`，上上一个版本就是 `HEAD^^`，当然往上100个版本写100个^比较容易数不过来，所以写成 `HEAD~100`
   + 方式二：`$ git reset --hard commit_id`
     + `commit_id` 指的是每次提交操作的版本号，使用 `$ git log` 命令可以查看全部提交操作的版本号，一般取版本号的前 7 位即可
+  + 注：`reset` 有三个参数：`--mixed` 、`--soft` 、`--hard`
+    + `--mixed`：使用此参数，暂存区内容会被丢弃，工作区内容保持不变
+    + `--soft`：使用此参数，暂存区和工作区的内容都保持不变
+    + `--hard`：使用此参数，工作区和暂存区的内容都会被丢弃
 
 --------------------------------------------------
 
@@ -285,6 +306,8 @@
   + `feature` 分支：开发新功能，实验性功能分支；每添加一个新功能，可以新建一个 `feature` 分支，在上面开发，完成后合并分支，最后删除该  `feature` 分支
 
 ### 查看分支
+
++ 查看 `HEAD` 指向：`$ git show HEAD`
 
 + 查看当前本地版本库的所有分支：`$ git branch`
 
@@ -418,6 +441,46 @@
 --------------------------------------------------
 
 ## 标签管理
+
++ 标签：`tag` 是一个让人容易记住的有意义的名字，它跟某个 `commit` 绑在一起
+
++ Git 的标签是版本库的快照，但其实它就是指向某个 `commit` 的指针（跟分支很像,但是分支可以移动，标签不能移动），所以，创建和删除标签都是瞬间完成的
+
++ 标签默认是打在分支最新提交的 `commit` 上的
+
++ 注意：标签总是和某个 `commit` 挂钩。如果这个 `commit` 既出现在 `master` 分支，又出现在 `dev` 分支，那么在这两个分支上都可以看到这个标签
+
+### 查看标签
+
++ 查看所有标签：`$ git tag`
+
++ 查看指定标签的信息：`$ git show <tag-name>`
+
+### 新建标签
+
++ 给某个分支打标签：`$ git tag <tag-name>`
+  + 在 Git 中打标签非常简单，首先，切换到需要打标签的分支上,然后打上标签
+
++ 给指定的 `commit_id` 打上标签：`$ git tag <tag-name> <commit_id>`
+  + 注：如果当时忘记了打标签，那么事后还可以根据对应的 `commit_id` 来创建标签
+
++ 创建带有说明的标签：`$ git tag -a v0.1 -m "version 0.1 released" commit_id`
+  + 用 `-a` 指定标签名，`-m` 指定说明文字
+
++ 推送某个标签到远程：`$ git push origin <tagname>`
+  + 注：推送本地标签到远程，所以此标签必须已存在
+
++ 一次性推送全部未推送过的本地标签到远程：`$ git push origin --tags`
+
+### 删除标签
+
++ 因为创建的标签都只存储在本地，不会自动推送到远程。所以，打错的标签可以在本地安全删除
+
++ 删除本地某个标签：`$ git tag -d <tag-name>`
+
++ 删除远程仓库的标签：`$ git push origin :refs/tags/<tag-name>`
+
++ 删除远程仓库的标签：`$ git push origin -d <tag-name>`
 
 ## 常见的问题
 
