@@ -109,9 +109,9 @@
   + 同时删除工作区和暂存区的文件：`$ git rm <file>`
     + 注：执行此命令自动将删除操作添加到暂存区
 
-+ 覆盖文件内容：`$ echo "message" > <file>`
++ 覆盖文件内容：`$ echo "content" > <file>`
 
-+ 追加内容到文件末尾：`$ echo "message" >> <file>`
++ 追加内容到文件末尾：`$ echo "content" >> <file>`
 
 + 显示暂存区和工作区的文件差异：`$ git diff`
 
@@ -120,11 +120,11 @@
     + `$ rm <file>`
     + `$ git rm <file>`
 
-  + **恢复文件，或者说撤销删除操作**
+  + **恢复文件，或者撤销删除操作**
     + 从工作区删除，还没有添加到暂存区，恢复文件只需要一步：`$ git checkout -- <file>`
     + 从工作区和暂存区删除，但是还没有提交到版本库，恢复文件需要两步：
       + 第一步，从暂存区移除：`$ git reset HEAD <file>`
-      + 第二步，撤销删除操作：`$ git checkout -+ <file>`
+      + 第二步，撤销删除操作：`$ git checkout -- <file>`
     + 如果删除操作已经提交至版本库：那么只能使用版本回退
       + 版本回退方式一：`$ git reset --hard HEAD^`
       + 版本回退方式二：`$ git reset --hard commit_id`
@@ -133,12 +133,17 @@
 
 ## 版本库相关操作
 
+### 新建版本库与提交版本
+
 + 从已存在的目录新建一个版本库：`$ git init`
 
++ 查看工作区与暂存区的内容：`$ git status`
+
 + 将操作从工作区添加到暂存区：`$ git add <file>`
+  + 注：`add` 命令可以执行多次，将多个操作添加到暂存区
 
 + 将操作从暂存区提交到版本库：`$ git commit -m "此次提交说明"`
-  + `add` 命令可以执行多次，将多个操作添加到暂存区；`commit` 命令可以一次性将暂存区的操作提交至版本库：
+  + `commit` 命令可以一次性将暂存区的操作提交至版本库：
 
     ```text
       git add file1.txt
@@ -146,12 +151,24 @@
       git commit -m "此次提交了两个文件"
     ```
 
-+ 移除暂存区中文件准备提交状态：`$ git reset HEAD <file>`
+### 撤销操作
 
-+ 查看工作区与暂存区的内容：`$ git status`
++ 撤销工作区的文件修改：`$ git checkout -- <file>`
+  + 注：此命令只能撤销工作区的文件修改
+
++ 移除暂存区中文件准备提交状态：`$ git reset HEAD <file>`
+  + 注：此命令将文件从暂存区移除，并放到工作区
+
++ 撤销上一次提交并将暂存区文件重新提交：`$ git commit --amend`
+  + 带上提交信息：`$ git commit --amend -m "commit message"`
+  + 注：如果自上次提交以来你还未做任何修改（例如，在上次提交后马上执行了此命令），那么快照会保持不变，而你所修改的只是提交信息
+  + 注：如果暂存区中内容已修改，最终你只会有一个提交：第二次提交将代替第一次提交的结果
+
+### 查看日志与历史
 
 + 查看提交日志：`$ git log`
   + 将每一个提交日志缩减为一行显示：`$ git log --pretty=oneline`
+  + 缩短 `commit_id` ，一行内显示：`$ git log --pretty=oneline --abbrev-commit`
   + 查看指定文件的提交日志，并且缩减为一行显示：`$ git log --pretty=oneline <file>`
   + 注：此命令不能查看已删除的提交日志，即如果进行了版本回退，那么回退版本号之后再提交的日志都不能查看，如要查看全部提交日志，请使用 `$ git reflog`
 
@@ -172,12 +189,17 @@
 
 ### 查看远程仓库的信息
 
-+ 查看远程仓库的信息：`$ git remote`
++ 查看远程仓库名称：`$ git remote`
 
 + 查看远程仓库的详细信息：`$ git remote -v`
   + 可抓取的远程仓库地址：`origin  git@github.com:your/yourRepos.git (fetch)`
   + 可推送的远程仓库地址：`origin  git@github.com:your/yourRepos.git (push)`
   + 注：如果没有抓取或者推送的权限，就看不到相应的地址
+
++ 查看远程仓库的引用信息：`$ git ls-remote`
+  + 注：此命令可获得远程引用的完整列表
+
++
 
 ### 连接与取消连接远程仓库
 
@@ -203,6 +225,7 @@
 
 + 推送本地分支推送到远程仓库的分支：`$ git push origin <local-branch>:<remote-ranch>`
   + 例如：将本地分支 `local-branch` 推送到远程仓库的 `remote-branch` 分支,如果远程仓库没有 `remote-branch` 分支就会创建新分支，并且接收本地分支的所有提交
+  + 可以通过这种格式来推送本地分支到一个命名不相同的远程分支
 
 ### 从远程仓库拉取
 
@@ -222,6 +245,8 @@
     git diff temp  //将当前分支和 temp 进行对比
     git merge temp //合并 temp 分支到当前分支
     ```
+
+    + 运行 `git fetch origin` 命令：这个命令从远程仓库中抓取本地没有的数据，并且更新本地数据库，移动 `origin/master` 指针指向新的、更新后的位置
 
   + `git pull`：从远程获取最新版本并 `merge` 到本地
   
@@ -269,7 +294,8 @@
   + `$ git log --graph --pretty=oneline`
   + `$ git log --graph --pretty=oneline --abbrev-commit`
 
-+ 查看本地分支的远程跟踪分支（上游分支）：`git branch -vv`
++ 查看本地分支与其远程跟踪分支（上游分支）：`git branch -vv`
+  + 注：此命令可比较本地分支与其跟踪分支的提交状况
 
 + 比较本地分支与远程分支的不同：`$ git log -p <local-branch>..origin/<remote-branch>`
 
@@ -304,7 +330,7 @@
   + 注：`git merge` 命令用并于合指定分支到当前分支。比如当前分支是 `master` ，那么此命令就是将 `new` 分支合并到 `master` 上
   + 注：此命令使用的是 `fast forward` 模式，在这种模式下，删除被合并分支后，会丢掉分支信息
 
-+ 合并指定分支到当前分支并且不使用 `fast forward` 模式：`$ git merge --no-ff -m "commit message" new`
++ 合并指定分支到当前分支并且不使用 `fast forward` 模式：`$ git merge --no-ff -m "commit message" <branch-name>`
   + 注：`--no-ff` 表示强制禁用 `fast forward` 模式，Git 就会在`merge` 时生成一个新的 `commit`，这样，从分支历史上就可以看出分支信息
 
 ### 删除分支
