@@ -47,6 +47,8 @@
 
 + 查看全局配置信息：`$ git config --global --list`
 
++ 查看本地用户：`$ whoami`
+
 ### 局部信息
 
 + 添加或者修改局部用户名：`$ git config user.name "your name"`
@@ -59,8 +61,6 @@
 
 + 查看局部配置信息：`$ git config --local --list`
 
-+ 查看本地用户：`$ whoami`
-
 --------------------------------------------------
 
 ## 目录 / 文件夹操作
@@ -72,6 +72,8 @@
 + 进入到本地用户目录：`$ cd ~`
 
 + 创建一个新目录：`$ mkdir <direction>`
+
++ 显示当前目录在本地的地址：`$ pwd`
 
 + 显示目录中的内容：
   + 显示内容较为简洁：`$ ls`
@@ -148,15 +150,15 @@
 
 + 比较工作区和暂存区的文件差异：`$ git diff`
 
-+ 比较暂存区与最新本地版本库：`$ git --cached`
++ 比较暂存区与最新本地版本库：`$ git diff --cached`
 
-+ 比较工作区与最新本地版本库：`$ git HEAD`
++ 比较工作区与最新本地版本库：`$ git diff HEAD`
 
-+ 比较工作区与指定 `commit_id` 的差异：`$ git commit_id`
++ 比较工作区与指定 `commit_id` 的差异：`$ git diff commit_id`
 
-+ 比较暂存区与指定 `commit_id` 的差异：`$ git --cached commit_id`
++ 比较暂存区与指定 `commit_id` 的差异：`$ git diff --cached commit_id`
 
-+ 比较两个 `commit-id` 之间的差异：`$ git commit_id commit_id`
++ 比较两个 `commit-id` 之间的差异：`$ git diff commit_id commit_id`
 
 --------------------------------------------------
 
@@ -196,7 +198,7 @@
   + 注：如果自上次提交以来你还未做任何修改（例如，在上次提交后马上执行了此命令），那么快照会保持不变，而你所修改的只是提交信息
   + 注：如果暂存区中内容已修改，最终你只会有一个提交：第二次提交将代替第一次提交的结果
 
-### 查看日志与历史
+### 查看提交日志与历史
 
 + 查看提交日志：`$ git log`
   + 一行内显示简写：`$ git log --oneline`
@@ -295,7 +297,7 @@
 
 + 抓取远程仓库最新的内容：`$ git fetch --all`
 
-+ 抓取远程分支最新内容到当前分支： `git fetch origin <branch-name>` 
++ 抓取远程分支最新内容到当前分支： `git fetch origin <branch-name>`
   + 注：此命令从远程仓库中抓取本地没有的数据，并且更新本地数据库,并设定当前分支的 `FETCH_HEAD` 为对应的远程仓库分支
   + 注：你需要比较远程分支内容和当前分支内容的差异，视需要手动将远程分支合并到本地分支 `$ git merge origin/<branch-name>`
 
@@ -432,8 +434,8 @@
   + 注：分支存在修改但还没有被合并，如果删除将会丢失修改，系统会阻止删除操作。如果要强行删除，需要使用大写的 `-D` 参数
 
 + 删除远程仓库指定分支：
-  + 方式一：`$ git push origin -d new`
-  + 方式二：`$ git push origin :new`
+  + 方式一：`$ git push origin -d <branch-name>`
+  + 方式二：`$ git push origin :<branch-name>`
 
 ### 储藏分支 - `stash`
 
