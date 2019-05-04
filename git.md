@@ -63,6 +63,20 @@
 
 --------------------------------------------------
 
+## SSH Key
+
++ 检查本地是否存在 SSH Key：`$ cd ~/.ssh`
+  + 注：如果显示 `No such file or directory` 则需要去创建一个新的SSH Key
+
++ 创建 SSH Key：`$ ssh-keygen -t rsa -C "yourname@email.com"`
+  + 注：如果创建成功，`.ssh` 目录里面有 `id_rsa` 和 `id_rsa.pub` 两个文件，这两个就是 SSH Key 的秘钥对，`id_rsa` 是私钥，不能泄露出去，`id_rsa.pub` 是公钥，可以放心地告诉任何人
+
++ 在 GitHub 中配置 SSH Key：
+  + 1、打开 'Account settings'，'SSH Keys' 页面
+  + 2、点 'Add SSH Key'，填上任意 'Title'，在 'Key' 文本框里粘贴   `id_rsa.pub` 文件的内容
+
+--------------------------------------------------
+
 ## 目录 / 文件夹操作
 
 + 进入下一级目录：`$ cd <direction>`
